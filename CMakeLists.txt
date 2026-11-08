@@ -27,6 +27,5 @@ target_compile_definitions(Zankyo PUBLIC
     JUCE_VST3_CAN_REPLACE_VST2=0)
 
 target_link_libraries(Zankyo
-    PRIVATE juce::juce_audio_utils juce::juce_dsp
-    PUBLIC juce::juce_recommended_config_flags
-           juce::juce_recommended_lib_flags)
+       PRIVATE juce::juce_audio_utils juce::juce_dsp
+       PUBLIC juce::juce_recommended_config_flags)
