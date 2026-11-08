@@ -1,6 +1,7 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
+#include "Dsp.h"
 
 class ZankyoProcessor : public juce::AudioProcessor
 {
@@ -21,10 +22,10 @@ public:
     bool producesMidi() const override { return false; }
     double getTailLengthSeconds() const override { return 8.0; }
 
-    int getNumPrograms() override { return 1; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram(int) override {}
-    const juce::String getProgramName(int) override { return "Default"; }
+    int getNumPrograms() override;
+    int getCurrentProgram() override { return currentPreset; }
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
     void changeProgramName(int, const juce::String&) override {}
 
     void getStateInformation(juce::MemoryBlock& destData) override;
@@ -39,6 +40,11 @@ private:
     juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Linear> preDelay { 192000 };
     juce::dsp::StateVariableTPTFilter<float> lowCut, highCut;
     juce::AudioBuffer<float> wet;
+    OctaveUp shiftL, shiftR;
+    ReverseSwell revL, revR;
+    juce::SmoothedValue<float> shimSm, revSm;
+    float fbL = 0.f, fbR = 0.f;
+    int currentPreset = 0;
     double sr = 44100.0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ZankyoProcessor)
